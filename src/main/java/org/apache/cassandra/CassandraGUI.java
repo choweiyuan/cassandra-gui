@@ -98,6 +98,7 @@ public class CassandraGUI extends JFrame {
         splitPane.setRightComponent(rightSplitPane);
         splitPane.setOneTouchExpandable(true);
         splitPane.setDividerSize(6);
+        splitPane.setResizeWeight(.3);
 
         add(splitPane);
         setBounds(10, 10, 850, 650);
