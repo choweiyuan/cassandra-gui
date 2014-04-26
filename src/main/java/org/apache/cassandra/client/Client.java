@@ -700,10 +700,10 @@ public class Client {
                     String name = getAsString(col.bufferForName(), cfdata.get("SUBCOMPARATOR_TYPE").toString());
 					@SuppressWarnings("unchecked")
 					String val = getAsString(col.bufferForValue(), getValidationType(col.bufferForName(), (List<ColumnDef>)cfdata.get("COLUMN_METADATA"), cfdata.get("DEFAULT_VALIDATION_CLASS").toString()));
-                    Cell c = new Cell(s,
-                                      name, val,
-                                      new Date(col.getTimestamp() / 1000));
-                    s.getCells().put(c.getName(), c);
+                  Cell c = new Cell(s,
+                                     name, val,
+                                     new Date(col.getTimestamp() / 1000),
+                                     col.getTtl());                    s.getCells().put(c.getName(), c);
                 }
 
                 k.getSColumns().put(s.getName(), s);
@@ -712,10 +712,11 @@ public class Client {
                 String name = getAsString(col.bufferForName(), cfdata.get("COMPARATOR_TYPE").toString());
                 @SuppressWarnings("unchecked")
 				String val = getAsString(col.bufferForValue(), getValidationType(col.bufferForName(), (List<ColumnDef>)cfdata.get("COLUMN_METADATA"), cfdata.get("DEFAULT_VALIDATION_CLASS").toString()));
-                Cell c = new Cell(k,
-                                  name, val,
-                                  new Date(col.getTimestamp() / 1000));
-                k.getCells().put(c.getName(), c);
+              Cell c = new Cell(k,
+                                 name, val,
+                                 new Date(col.getTimestamp() / 1000),
+                                 col.getTtl());
+              k.getCells().put(c.getName(), c);
             }
 
             m.put(k.getName(), k);
@@ -816,13 +817,15 @@ public class Client {
                     for (Column col : scol.getColumns()) {
                         String name = getAsString(col.bufferForName(), cfdata.get("SUBCOMPARATOR_TYPE").toString());
     					@SuppressWarnings("unchecked")
-						String val = getAsString(col.bufferForValue(), getValidationType(col.bufferForName(), (List<ColumnDef>)cfdata.get("COLUMN_METADATA"), cfdata.get("DEFAULT_VALIDATION_CLASS").toString()));
-                        
-                        Cell c = new Cell(s,
-                                          name,
-                                          val,
-                                          new Date(col.getTimestamp() / 1000));
-                        s.getCells().put(c.getName(), c);
+              String val = getAsString(col.bufferForValue(), getValidationType(col.bufferForName(), (List<ColumnDef>)cfdata.get("COLUMN_METADATA"), cfdata.get("DEFAULT_VALIDATION_CLASS").toString()));
+
+                      Cell c = new Cell(s,
+                                         name,
+                                         val,
+                                         new Date(col.getTimestamp() / 1000),
+                                         col.getTtl()
+                      );
+                      s.getCells().put(c.getName(), c);
                     }
 
                     key.getSColumns().put(s.getName(), s);
@@ -830,13 +833,14 @@ public class Client {
                     Column col = column.getColumn();
                     String name = getAsString(col.bufferForName(), cfdata.get("COMPARATOR_TYPE").toString());
                     @SuppressWarnings("unchecked")
-					String val = getAsString(col.bufferForValue(), getValidationType(col.bufferForName(), (List<ColumnDef>)cfdata.get("COLUMN_METADATA"), cfdata.get("DEFAULT_VALIDATION_CLASS").toString()));
-                    
-                    Cell c = new Cell(key,
-                    					name,
-                    					val,
-                                      new Date(col.getTimestamp() / 1000));
-                    key.getCells().put(c.getName(), c);
+                    String val = getAsString(col.bufferForValue(), getValidationType(col.bufferForName(), (List<ColumnDef>)cfdata.get("COLUMN_METADATA"), cfdata.get("DEFAULT_VALIDATION_CLASS").toString()));
+
+                  Cell c = new Cell(key,
+                                     name,
+                                     val,
+                                     new Date(col.getTimestamp() / 1000),
+                                     col.getTtl());
+                  key.getCells().put(c.getName(), c);
                 } else {
                 	throw new Exception("Unsupported Column type");
                 }

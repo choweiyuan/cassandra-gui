@@ -81,21 +81,24 @@ public class CellPropertiesDialog extends JDialog {
     private static final String KEY = "key";
     private static final String SUPER_COLUMN = "super column";
     private static final String NAME = "name";
-    private static final String VAELU = "value";
+    private static final String VALUE = "value";
+    private static final String TTL = "time to live";
 
     private JTextField keyText = new JTextField();
     private JTextField superColumnText = new JTextField();
     private JTextField nameText = new JTextField();
     private JTextField valueText = new JTextField();
+    private JTextField ttlText = new JTextField();
+
     private boolean cancel = true;
 
     private Map<String, JTextField> textFieldMap = new HashMap<String, JTextField>();
 
     public CellPropertiesDialog(int operation) {
-        this(operation, "", "");
+        this(operation, "", "", 0);
     }
 
-    public CellPropertiesDialog(int operation, String name, String value){
+    public CellPropertiesDialog(int operation, String name, String value, int ttl){
         JPanel propertiesPane = null;
         switch (operation) {
         case OPERATION_KEY_INSERT:
@@ -122,10 +125,10 @@ public class CellPropertiesDialog extends JDialog {
             break;
         case OPERATION_CELL_INSERT:
             nameText.addActionListener(new EnterAction());
-            propertiesPane = new JPanel(new GridLayout(2, 2));
+            propertiesPane = new JPanel(new GridLayout(3, 3));
             break;
         case OPERATION_CELL_UPDATE:
-            propertiesPane = new JPanel(new GridLayout(2, 2));
+            propertiesPane = new JPanel(new GridLayout(3, 3));
             nameText.setEditable(false);
             break;
         }
@@ -134,13 +137,23 @@ public class CellPropertiesDialog extends JDialog {
         valueText.setText(value);
         valueText.addActionListener(new EnterAction());
 
+        String ttlTextToInsert = Integer.toString(ttl);
+        if (ttl == 0) {
+          ttlTextToInsert = "0 (indefinite)";
+        }
+        ttlText.setText(ttlTextToInsert);
+
         propertiesPane.add(new JLabel(NAME + ": "));
         propertiesPane.add(nameText);
         textFieldMap.put(NAME, nameText);
 
-        propertiesPane.add(new JLabel(VAELU + ": "));
+        propertiesPane.add(new JLabel(VALUE + ": "));
         propertiesPane.add(valueText);
-        textFieldMap.put(VAELU, valueText);
+        textFieldMap.put(VALUE, valueText);
+
+        propertiesPane.add(new JLabel(TTL + ": "));
+        propertiesPane.add(ttlText);
+        textFieldMap.put(TTL, ttlText);
 
         nameText.addMouseListener(new MousePopup(nameText));
         valueText.addMouseListener(new MousePopup(valueText));
@@ -210,5 +223,9 @@ public class CellPropertiesDialog extends JDialog {
 
     public String getValue() {
         return valueText.getText();
+    }
+
+    public int getTtl() {
+      return Integer.parseInt(ttlText.getText());
     }
 }

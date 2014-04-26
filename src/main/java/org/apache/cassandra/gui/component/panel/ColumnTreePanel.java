@@ -200,7 +200,12 @@ public class ColumnTreePanel extends JPanel {
                 for (String cName : k.getCells().keySet()) {
                     Cell c = k.getCells().get(cName);
                     DefaultMutableTreeNode cellNode =
-                        new DefaultMutableTreeNode(c.getName() + "=" + c.getValue() + ", " + DATE_FORMAT.format(c.getDate()));
+                      new DefaultMutableTreeNode(
+                                                  "<html><b>" + c.getName() + "</b> = " + c.getValue() +
+                                                    ";<b> Timestamp</b>: " + DATE_FORMAT.format(c.getDate()) +
+                                                    ";<b> TTL</b>: " + c.getTtl()
+                                                    + "</html>"
+                      );
                     c.setTreeNode(cellNode);
                     keyNode.add(cellNode);
                     unitMap.put(cellNode, c);

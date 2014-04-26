@@ -92,6 +92,7 @@ public class ColumnPopupAction extends AbstractAction {
 		String superColumn = cpdlg.getSuperColumn();
 		String name = cpdlg.getName();
 		String value = cpdlg.getValue();
+    int ttl = cpdlg.getTtl();
 
 		boolean keyFound = false;
 		boolean superColumnFound = false;
@@ -156,7 +157,7 @@ public class ColumnPopupAction extends AbstractAction {
 			DefaultMutableTreeNode cn = new DefaultMutableTreeNode(name + "="
 					+ value + ", " + DATE_FORMAT.format(d));
 			if (c == null) {
-				c = new Cell(s, name, value, d);
+        c = new Cell(s, name, value, d, ttl);
 				c.setTreeNode(cn);
 				if (isSuperColumn) {
 					c.setParent(s);
@@ -190,7 +191,7 @@ public class ColumnPopupAction extends AbstractAction {
 			DefaultMutableTreeNode cn = new DefaultMutableTreeNode(name + "="
 					+ value + ", " + DATE_FORMAT.format(d));
 			if (c == null) {
-				c = new Cell(s, name, value, d);
+        c = new Cell(s, name, value, d, ttl);
 				c.setTreeNode(cn);
 				c.setParent(k);
 			} else {
@@ -246,7 +247,7 @@ public class ColumnPopupAction extends AbstractAction {
 		}
 
 		if (isSuperColumn) {
-			Cell c = new Cell(s, cpdlg.getName(), cpdlg.getValue(), d);
+      Cell c = new Cell(s, cpdlg.getName(), cpdlg.getValue(), d, cpdlg.getTtl());
 			DefaultMutableTreeNode cn = new DefaultMutableTreeNode(c.getName()
 					+ "=" + c.getValue() + ", "
 					+ DATE_FORMAT.format(c.getDate()));
@@ -259,7 +260,7 @@ public class ColumnPopupAction extends AbstractAction {
 			treeNode.getUnitMap().put(sn, s);
 			treeNode.getUnitMap().put(cn, c);
 		} else {
-			Cell c = new Cell(k, cpdlg.getName(), cpdlg.getValue(), d);
+      Cell c = new Cell(k, cpdlg.getName(), cpdlg.getValue(), d, cpdlg.getTtl());
 			DefaultMutableTreeNode cn = new DefaultMutableTreeNode(c.getName()
 					+ "=" + c.getValue() + ", "
 					+ DATE_FORMAT.format(c.getDate()));
@@ -295,7 +296,7 @@ public class ColumnPopupAction extends AbstractAction {
             e.printStackTrace();
         }
 
-        Cell c = new Cell(s, cpdlg.getName(), cpdlg.getValue(), d);
+        Cell c = new Cell(s, cpdlg.getName(), cpdlg.getValue(), d, cpdlg.getTtl());
         DefaultMutableTreeNode cn = new DefaultMutableTreeNode(c.getName() + "=" + c.getValue() + ", " +
                                                                DATE_FORMAT.format(c.getDate()));
         s.getCells().put(c.getName(), c);
@@ -307,9 +308,9 @@ public class ColumnPopupAction extends AbstractAction {
 
 	private void updateCell() {
 		Cell c = (Cell) treeNode.getUnit();
-		CellPropertiesDialog cpdlg = new CellPropertiesDialog(
-				CellPropertiesDialog.OPERATION_CELL_UPDATE, c.getName(),
-				c.getValue());
+    CellPropertiesDialog cpdlg = new CellPropertiesDialog(
+                                                           CellPropertiesDialog.OPERATION_CELL_UPDATE, c.getName(),
+                                                           c.getValue(), c.getTtl());
 		cpdlg.setVisible(true);
 		if (cpdlg.isCancel()) {
 			return;
