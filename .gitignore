@@ -3,3 +3,5 @@ bin/
 lib/
 target/
 .settings/
+.idea
+*.iml
