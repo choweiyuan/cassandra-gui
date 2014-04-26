@@ -30,24 +30,20 @@ public class KeyspaceDialog extends JDialog {
     }
 
     private JTextField keyspaceText = new JTextField();
-    private JTextField replicationFactorText = new JTextField();
     private JComboBox strategyBox = new JComboBox();
     private JTextField optionText = new JTextField();
 
     private boolean cancel = true;
     private String keyspaceName;
-    private int replicationFactor;
     private String strategy;
     private Map<String, String> strategyOptions = new HashMap<String, String>();
 
     public KeyspaceDialog(String keyspaceName,
-                          int replicationFactor,
-                          String strategy,
-                          Map<String, String> strategyOptions) {
+                           String strategy,
+                           Map<String, String> strategyOptions) {
         keyspaceText.setText(keyspaceName);
         keyspaceText.setEditable(false);
 
-        replicationFactorText.setText(String.valueOf(replicationFactor));
 
         String selectedStrategy = null;
         for (Entry<String, String> entry : Client.getStrategyMap().entrySet()) {
@@ -74,14 +70,11 @@ public class KeyspaceDialog extends JDialog {
 
     public void create(String selectedStrategy) {
         keyspaceText.addActionListener(new EnterAction());
-        replicationFactorText.addActionListener(new EnterAction());
         optionText.addActionListener(new EnterAction());
 
         JPanel inputPanel = new JPanel(new GridLayout(4, 2));
         inputPanel.add(new JLabel("Keyspace Name: "));
         inputPanel.add(keyspaceText);
-        inputPanel.add(new JLabel("Replication Factor: "));
-        inputPanel.add(replicationFactorText);
 
         for (String s : Client.getStrategyMap().keySet()) {
             strategyBox.addItem(s);
@@ -136,19 +129,6 @@ public class KeyspaceDialog extends JDialog {
         }
         keyspaceName = keyspaceText.getText();
 
-        if (replicationFactorText.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Enter Replication Factor.");
-            replicationFactorText.requestFocus();
-            return;
-        }
-        try {
-            replicationFactor = Integer.valueOf(replicationFactorText.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "number input Replication Factor.");
-            replicationFactorText.requestFocus();
-            return;
-        }
-
         strategy = (String) strategyBox.getSelectedItem();
 
         String options = optionText.getText();
@@ -181,13 +161,6 @@ public class KeyspaceDialog extends JDialog {
      */
     public String getKeyspaceName() {
         return keyspaceName;
-    }
-
-    /**
-     * @return the replicationFactor
-     */
-    public int getReplicationFactor() {
-        return replicationFactor;
     }
 
     /**

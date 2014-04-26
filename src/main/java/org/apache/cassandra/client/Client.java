@@ -4,65 +4,29 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.management.MemoryUsage;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.apache.cassandra.concurrent.IExecutorMBean;
 import org.apache.cassandra.concurrent.JMXEnabledThreadPoolExecutorMBean;
-import org.apache.cassandra.config.ConfigurationException;
 import org.apache.cassandra.db.marshal.AbstractCompositeType;
 import org.apache.cassandra.db.marshal.AbstractType;
 import org.apache.cassandra.db.marshal.TypeParser;
-import org.apache.cassandra.dht.Token;
+import org.apache.cassandra.exceptions.ConfigurationException;
+import org.apache.cassandra.exceptions.SyntaxException;
 import org.apache.cassandra.node.NodeInfo;
 import org.apache.cassandra.node.RingNode;
 import org.apache.cassandra.node.Tpstats;
-import org.apache.cassandra.thrift.Cassandra;
-import org.apache.cassandra.thrift.CfDef;
-import org.apache.cassandra.thrift.Column;
-import org.apache.cassandra.thrift.ColumnDef;
-import org.apache.cassandra.thrift.ColumnOrSuperColumn;
-import org.apache.cassandra.thrift.ColumnParent;
-import org.apache.cassandra.thrift.ColumnPath;
-import org.apache.cassandra.thrift.ConsistencyLevel;
-import org.apache.cassandra.thrift.InvalidRequestException;
-import org.apache.cassandra.thrift.KeyRange;
-import org.apache.cassandra.thrift.KeySlice;
-import org.apache.cassandra.thrift.KsDef;
-import org.apache.cassandra.thrift.NotFoundException;
-import org.apache.cassandra.thrift.SchemaDisagreementException;
-import org.apache.cassandra.thrift.SlicePredicate;
-import org.apache.cassandra.thrift.SliceRange;
-import org.apache.cassandra.thrift.SuperColumn;
-import org.apache.cassandra.thrift.TimedOutException;
-import org.apache.cassandra.thrift.TokenRange;
-import org.apache.cassandra.thrift.UnavailableException;
+import org.apache.cassandra.thrift.*;
 import org.apache.cassandra.tools.NodeProbe;
-import org.apache.cassandra.unit.Cell;
-import org.apache.cassandra.unit.ColumnFamily;
-import org.apache.cassandra.unit.ColumnFamilyMetaData;
-import org.apache.cassandra.unit.Key;
-import org.apache.cassandra.unit.SColumn;
+import org.apache.cassandra.unit.*;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.TFramedTransport;
-import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
+import org.apache.thrift.transport.*;
 
 /**
- * Client class to interact with Cassandara cluster
+ * Client class to interact with Cassandra cluster
  *
  */
 public class Client {
@@ -166,7 +130,7 @@ public class Client {
     public RingNode listRing() {
         RingNode r = new RingNode();
         r.setRangeMap(probe.getTokenToEndpointMap());
-        List<Token> ranges = new ArrayList<Token>(r.getRangeMap().keySet());
+        List<String> ranges = new ArrayList<String>(r.getRangeMap().keySet());
         Collections.sort(ranges);
         r.setRanges(ranges);
 
@@ -223,11 +187,9 @@ public class Client {
     }
 
     public void addKeyspace(String keyspaceName,
-                            String strategy,
-                            Map<String, String> strategyOptions,
-                            int replicationFactgor) throws InvalidRequestException, TException, SchemaDisagreementException {
+                             String strategy,
+                             Map<String, String> strategyOptions) throws TException, InvalidRequestException, SchemaDisagreementException {
         KsDef ksDef = new KsDef(keyspaceName, strategy, new LinkedList<CfDef>());
-        ksDef.setReplication_factor(replicationFactgor); // TODO should be provided in strategy options
         if (strategyOptions != null) {
             ksDef.setStrategy_options(strategyOptions);
         }
@@ -236,11 +198,10 @@ public class Client {
     }
 
     public void updateKeyspace(String keyspaceName,
-                               String strategy,
-                               Map<String, String> strategyOptions,
-                               int replicationFactgor) throws InvalidRequestException, TException, SchemaDisagreementException {
+                                String strategy,
+                                Map<String, String> strategyOptions) throws TException, InvalidRequestException, SchemaDisagreementException {
         KsDef ksDef = new KsDef(keyspaceName, strategy, new LinkedList<CfDef>());
-        ksDef.setReplication_factor(replicationFactgor); // TODO should be provided in strategy options
+//        ksDef.setReplication_factor(replicationFactor); // TODO should be provided in strategy options
         if (strategyOptions != null) {
             ksDef.setStrategy_options(strategyOptions);
         }
@@ -253,7 +214,7 @@ public class Client {
     }
 
     public void addColumnFamily(String keyspaceName,
-                                ColumnFamily cf) throws InvalidRequestException, TException, SchemaDisagreementException {
+                                ColumnFamily cf) throws TException, InvalidRequestException, SchemaDisagreementException {
         this.keyspace = keyspaceName;
         CfDef cfDef = new CfDef(keyspaceName, cf.getColumnFamilyName());
         cfDef.setColumn_type(cf.getColumnType());
@@ -273,19 +234,23 @@ public class Client {
         }
 
         if (!isEmpty(cf.getRowsCached())) {
-            cfDef.setRow_cache_size(Double.valueOf(cf.getRowsCached()));
+          //FIXME @Deprecated
+          //            cfDef.setRow_cache_size(Double.valueOf(cf.getRowsCached()));
         }
 
         if (!isEmpty(cf.getRowCacheSavePeriod())) {
-            cfDef.setRow_cache_save_period_in_seconds(Integer.valueOf(cf.getRowCacheSavePeriod()));
+          //FIXME @Deprecated
+          //            cfDef.setRow_cache_save_period_in_seconds(Integer.valueOf(cf.getRowCacheSavePeriod()));
         }
 
         if (!isEmpty(cf.getKeysCached())) {
-            cfDef.setKey_cache_size(Double.valueOf(cf.getKeysCached()));
+          //FIXME @Deprecated
+          //            cfDef.setKey_cache_size(Double.valueOf(cf.getKeysCached()));
         }
 
         if (!isEmpty(cf.getKeyCacheSavePeriod())) {
-            cfDef.setKey_cache_save_period_in_seconds(Integer.valueOf(cf.getKeyCacheSavePeriod()));
+          //FIXME @Deprecated
+          //            cfDef.setKey_cache_save_period_in_seconds(Integer.valueOf(cf.getKeyCacheSavePeriod()));
         }
 
         if (!isEmpty(cf.getReadRepairChance())) {
@@ -367,19 +332,23 @@ public class Client {
         }
 
         if (!isEmpty(cf.getRowsCached())) {
-            cfDef.setRow_cache_size(Double.valueOf(cf.getRowsCached()));
+          //FIXME @Deprecated
+//          cfDef.setRow_cache_size(Double.valueOf(cf.getRowsCached()));
         }
 
         if (!isEmpty(cf.getRowCacheSavePeriod())) {
-            cfDef.setRow_cache_save_period_in_seconds(Integer.valueOf(cf.getRowCacheSavePeriod()));
+          //FIXME @Deprecated
+          //            cfDef.setRow_cache_save_period_in_seconds(Integer.valueOf(cf.getRowCacheSavePeriod()));
         }
 
         if (!isEmpty(cf.getKeysCached())) {
-            cfDef.setKey_cache_size(Double.valueOf(cf.getKeysCached()));
+          //FIXME @Deprecated
+          //            cfDef.setKey_cache_size(Double.valueOf(cf.getKeysCached()));
         }
 
         if (!isEmpty(cf.getKeyCacheSavePeriod())) {
-            cfDef.setKey_cache_save_period_in_seconds(Integer.valueOf(cf.getKeyCacheSavePeriod()));
+          //FIXME @Deprecated
+          //            cfDef.setKey_cache_save_period_in_seconds(Integer.valueOf(cf.getKeyCacheSavePeriod()));
         }
 
         if (!isEmpty(cf.getReadRepairChance())) {
@@ -446,7 +415,7 @@ public class Client {
     }
 
     public void truncateColumnFamily(String keyspaceName, String columnFamilyName)
-            throws InvalidRequestException, TException, UnavailableException {
+      throws InvalidRequestException, TException, UnavailableException, TimedOutException {
         this.keyspace = keyspaceName;
         this.columnFamily = columnFamilyName;
         client.set_keyspace(keyspaceName);
@@ -506,10 +475,10 @@ public class Client {
                 cf.setComparator(cd.getComparator_type());
                 cf.setSubcomparator(cd.getSubcomparator_type());
                 cf.setComment(cd.getComment());
-                cf.setRowsCached(String.valueOf(cd.getRow_cache_size()));
-                cf.setRowCacheSavePeriod(String.valueOf(cd.getRow_cache_save_period_in_seconds()));
-                cf.setKeysCached(String.valueOf(cd.getKey_cache_size()));
-                cf.setKeyCacheSavePeriod(String.valueOf(cd.getKey_cache_save_period_in_seconds()));
+//              //FIXME @Deprecated cf.setRowsCached(String.valueOf(cd.getRow_cache_size()));
+//              //FIXME @Deprecated cf.setRowCacheSavePeriod(String.valueOf(cd.getRow_cache_save_period_in_seconds()));
+//              //FIXME @Deprecated cf.setKeysCached(String.valueOf(cd.getKey_cache_size()));
+//              //FIXME @Deprecated cf.setKeyCacheSavePeriod(String.valueOf(cd.getKey_cache_save_period_in_seconds()));
                 cf.setReadRepairChance(String.valueOf(cd.getRead_repair_chance()));
                 cf.setGcGrace(String.valueOf(cd.getGc_grace_seconds()));
                 // FIXME @Deprecated cf.setMemtableOperations(String.valueOf(cd.getMemtable_operations_in_millions()));
@@ -738,13 +707,15 @@ public class Client {
 				while ((i = marshalType.indexOf(',',i)) > 0) {
 					str += ":";
 					i++;
-				}
-			}
-			bytes = abstractType.fromString(str);
-		} catch (ConfigurationException e) {
-			e.printStackTrace();
-		}
-    	return bytes;
+        }
+      }
+        bytes = abstractType.fromString(str);
+      } catch(ConfigurationException e) {
+        e.printStackTrace();
+      } catch(SyntaxException e) {
+        e.printStackTrace();
+      }
+      return bytes;
     }
 
     @SuppressWarnings("rawtypes")
@@ -756,8 +727,10 @@ public class Client {
 			val = abstractType.getString(bytes);
 		} catch (ConfigurationException e) {
 			e.printStackTrace();
-		}
-    	return val;
+		} catch(SyntaxException e) {
+        e.printStackTrace();
+      }
+      return val;
     }
     
     private String getValidationType(java.nio.ByteBuffer nameBytes, List<ColumnDef> columns, String defaultType) {

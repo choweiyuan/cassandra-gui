@@ -1,10 +1,6 @@
 package org.apache.cassandra.gui.component.dialog;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.FlowLayout;
-import java.awt.Paint;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -12,22 +8,7 @@ import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-
-import org.apache.cassandra.client.Client;
-import org.apache.cassandra.dht.Range;
-import org.apache.cassandra.dht.Token;
-import org.apache.cassandra.node.NodeInfo;
-import org.apache.cassandra.node.RingNode;
-import org.apache.cassandra.node.Tpstats;
+import javax.swing.*;
 
 import edu.uci.ics.jung.graph.ArchetypeVertex;
 import edu.uci.ics.jung.graph.Vertex;
@@ -37,19 +18,13 @@ import edu.uci.ics.jung.graph.decorators.VertexStringer;
 import edu.uci.ics.jung.graph.impl.UndirectedSparseEdge;
 import edu.uci.ics.jung.graph.impl.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.impl.UndirectedSparseVertex;
-import edu.uci.ics.jung.visualization.Layout;
-import edu.uci.ics.jung.visualization.PickSupport;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
-import edu.uci.ics.jung.visualization.ShapePickSupport;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.*;
 import edu.uci.ics.jung.visualization.contrib.CircleLayout;
-import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.LayoutScalingControl;
-import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
-import edu.uci.ics.jung.visualization.control.RotatingGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
+import edu.uci.ics.jung.visualization.control.*;
+import org.apache.cassandra.client.Client;
+import org.apache.cassandra.node.NodeInfo;
+import org.apache.cassandra.node.RingNode;
+import org.apache.cassandra.node.Tpstats;
 
 public class RingDialog extends JDialog {
     private static final long serialVersionUID = 1543749033698969116L;
@@ -94,8 +69,8 @@ public class RingDialog extends JDialog {
         final RingNode ringNode = client.listRing();
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
-        final Map<Token, String> rangeMap = ringNode.getRangeMap();
-        final List<Token> ranges = ringNode.getRanges();
+        final Map<String, String> rangeMap = ringNode.getRangeMap();
+        final List<String> ranges = ringNode.getRanges();
         final List<String> liveNodes = ringNode.getLiveNodes();
         final List<String> deadNodes = ringNode.getDeadNodes();
         final Map<String, String> loadMap = ringNode.getLoadMap();
@@ -109,7 +84,7 @@ public class RingDialog extends JDialog {
         final Vertex[] vertices = new Vertex[rangeMap.size()];
 
         int count = 0;
-        for (Token range : ranges) {
+        for (String range : ranges) {
 //            List<String> endpoints = rangeMap.get(range);
             String endpoints = rangeMap.get(range);
 //            String primaryEndpoint = endpoints.get(0);
@@ -118,7 +93,7 @@ public class RingDialog extends JDialog {
             String label = "<html>" +
                            "Address: " + primaryEndpoint + "<br/>" +
                            "Load: " + load + "<br/>" +
-                           "Range: " + range.toString() +
+                           "Range: " + range +
                            "</html>";
 
             Vertex v = graph.addVertex(new UndirectedSparseVertex());

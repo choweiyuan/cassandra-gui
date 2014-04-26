@@ -9,8 +9,8 @@ import org.apache.cassandra.dht.Token;
 public class RingNode implements Serializable {
     private static final long serialVersionUID = 8351368757758010586L;
 
-    private Map<Token, String> rangeMap;
-    private List<Token> ranges;
+    private Map<String, String> rangeMap;
+    private List<String> ranges;
     private List<String> liveNodes;
     private List<String> deadNodes;
     private Map<String, String> loadMap;
@@ -18,28 +18,28 @@ public class RingNode implements Serializable {
     /**
      * @return the rangeMap
      */
-    public Map<Token, String> getRangeMap() {
+    public Map<String, String> getRangeMap() {
         return rangeMap;
     }
 
     /**
      * @param rangeMap the rangeMap to set
      */
-    public void setRangeMap(Map<Token, String> rangeMap) {
+    public void setRangeMap(Map<String, String> rangeMap) {
         this.rangeMap = rangeMap;
     }
 
     /**
      * @return the ranges
      */
-    public List<Token> getRanges() {
+    public List<String> getRanges() {
         return ranges;
     }
 
     /**
      * @param ranges the ranges to set
      */
-    public void setRanges(List<Token> ranges) {
+    public void setRanges(List<String> ranges) {
         this.ranges = ranges;
     }
 

@@ -1,30 +1,13 @@
 package org.apache.cassandra.gui.component.panel;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
-import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
+import javax.swing.*;
+import javax.swing.table.*;
 
 import org.apache.cassandra.client.Client;
 import org.apache.cassandra.gui.component.dialog.RingDialog;
@@ -94,8 +77,7 @@ public class PropertiesPanel extends JPanel {
     private static final String COLUMN_DOUBLE_CLICK_VALUE = "view the details by double-clicking";
 
     private static final String COLUMN_REPLICATION_STRATEGY = "Replication Strategy";
-    private static final String COLUMN_REPLICATION_FACTOR = "Replication Factor";
-    private static final String COLUMN_NUMBER_OF_COLUMN_FAMILY = "Number of Column Family";
+  private static final String COLUMN_NUMBER_OF_COLUMN_FAMILY = "Number of Column Family";
 
     private static final String[] columns = { "name", "value" };
 
@@ -123,7 +105,7 @@ public class PropertiesPanel extends JPanel {
 
             protected JTableHeader createDefaultTableHeader() {
                 return new Header(super.columnModel);
-            };
+            }
         };
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
@@ -144,7 +126,6 @@ public class PropertiesPanel extends JPanel {
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "error: " + e.getMessage());
                         e.printStackTrace();
-                        return;
                     }
                 }
             }
@@ -209,7 +190,6 @@ public class PropertiesPanel extends JPanel {
             tableModel.setRowCount(0);
             KsDef kd = client.describeKeyspace(keyspace);
 
-            tableModel.addRow(new String[] {COLUMN_REPLICATION_FACTOR, String.valueOf(kd.getReplication_factor())});
             tableModel.addRow(new String[] {COLUMN_REPLICATION_STRATEGY, kd.getStrategy_class()});
             int n = client.getColumnFamilys(keyspace).size();
             tableModel.addRow(new String[] {COLUMN_NUMBER_OF_COLUMN_FAMILY, String.valueOf(n)});

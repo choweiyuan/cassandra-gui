@@ -57,12 +57,14 @@ public class ColumnFamilyMetaDataDialog extends JDialog {
         column.setResizable(false);
 
         TableColumn colValidationClass = table.getColumnModel().getColumn(1);
+        @SuppressWarnings("unchecked")
         JComboBox validationClassCb = new JComboBox(Client.getValidationClassMap().values().toArray());
 
         validationClassCb.setBorder(BorderFactory.createEmptyBorder());
         colValidationClass.setCellEditor(new DefaultCellEditor(validationClassCb));
 
         TableColumn colIndexType = table.getColumnModel().getColumn(2);
+        @SuppressWarnings("unchecked")
         JComboBox indexTypeCb = new JComboBox(IndexType.values());
         indexTypeCb.setBorder(BorderFactory.createEmptyBorder());
         colIndexType.setCellEditor(new DefaultCellEditor(indexTypeCb));

@@ -86,8 +86,8 @@ public class KeyspaceTreePanel extends JPanel implements TreeSelectionListener {
                 try {
                     client.addKeyspace(ksd.getKeyspaceName(),
                                        ksd.getStrategy(),
-                                       ksd.getStrategyOptions(),
-                                       ksd.getReplicationFactor());
+                                       ksd.getStrategyOptions()
+                    );
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "error: " + ex.toString());
                     ex.printStackTrace();
@@ -108,8 +108,7 @@ public class KeyspaceTreePanel extends JPanel implements TreeSelectionListener {
                 }
 
                 ksd = new KeyspaceDialog(lastSelectedKeysapce,
-                                         ksDef.getReplication_factor(),
-                                         ksDef.getStrategy_class(),
+                                          ksDef.getStrategy_class(),
                                          ksDef.getStrategy_options());
                 ksd.setVisible(true);
                 if (ksd.isCancel()) {
@@ -119,8 +118,8 @@ public class KeyspaceTreePanel extends JPanel implements TreeSelectionListener {
                 try {
                     client.updateKeyspace(ksd.getKeyspaceName(),
                                           ksd.getStrategy(),
-                                          ksd.getStrategyOptions(),
-                                          ksd.getReplicationFactor());
+                                          ksd.getStrategyOptions()
+                    );
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "error: " + ex.toString());
                     ex.printStackTrace();
