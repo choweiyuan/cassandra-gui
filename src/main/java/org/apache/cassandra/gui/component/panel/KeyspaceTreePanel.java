@@ -329,8 +329,8 @@ public class KeyspaceTreePanel extends JPanel implements TreeSelectionListener {
                 JPopupMenu popup = new JPopupMenu();
                 switch (path.getPathCount()) {
                 case TREE_CLUSTER:
-                    popup.add(new PopupAction("create keysapce", PopupAction.OPERATION_CREATE_KEYSPACE, node));
-                    popup.add(new PopupAction("refresh", PopupAction.OPERATION_REFRESH_CLUSTER, node));
+                    popup.add(new PopupAction("Create Keyspace", PopupAction.OPERATION_CREATE_KEYSPACE, node));
+                    popup.add(new PopupAction("Refresh", PopupAction.OPERATION_REFRESH_CLUSTER, node));
                     popup.show(e.getComponent(), e.getX(), e.getY());
                     break;
                 case TREE_KEYSPACE:
