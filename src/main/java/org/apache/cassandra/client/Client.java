@@ -778,8 +778,8 @@ public class Client {
         }
 
         for (KeySlice keySlice : keySlices) {
-        	String keyName = getAsString(keySlice.bufferForKey(), cfdata.get("KEY_VALIDATION_CLASS").toString());
-			Key key = new Key(keyName, new TreeMap<String, SColumn>(), new TreeMap<String, Cell>());
+//        	String keyName = getAsString(keySlice.bufferForKey(), cfdata.get("KEY_VALIDATION_CLASS").toString());
+			Key key = new Key(new String(keySlice.getKey()), new TreeMap<String, SColumn>(), new TreeMap<String, Cell>());
 
             for (ColumnOrSuperColumn column : keySlice.getColumns()) {
                 key.setSuperColumn(column.isSetSuper_column());
