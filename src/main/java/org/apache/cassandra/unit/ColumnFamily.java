@@ -8,7 +8,11 @@ public class ColumnFamily {
     private String columnFamilyName;
     private String columnType;
     private String comparator;
-    private String subcomparator;
+
+  private String compactionStrategy;
+  private String compactionStrategyOptions;
+
+  private String subcomparator;
     private String comment;
     private String rowsCached;
     private String rowCacheSavePeriod;
@@ -292,4 +296,20 @@ public class ColumnFamily {
     public void setMetaDatas(List<ColumnFamilyMetaData> metaDatas) {
         this.metaDatas = metaDatas;
     }
+
+    public String getCompactionStrategy() {
+      return compactionStrategy;
+    }
+
+    public void setCompactionStrategy(String compactionStrategy) {
+      this.compactionStrategy = compactionStrategy;
+    }
+
+    public String getCompactionStrategyOptions() {
+      return compactionStrategyOptions;
+    }
+
+  public void setCompactionStrategyOptions(String compactionStrategyOptions) {
+    this.compactionStrategyOptions = compactionStrategyOptions;
+  }
 }

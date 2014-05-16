@@ -57,6 +57,8 @@ public class ColumnFamilyDialog extends JDialog {
     private JTextField defaultValidationClassText = new JTextField();
     private JTextField minCompactionThresholdText = new JTextField();
     private JTextField maxCompactionThresholdText = new JTextField();
+  private JTextField compactionStrategy = new JTextField();
+  private JTextField compactionStrategyOptions = new JTextField();
     private ColumnFamilyMetaDataDialog metaDataDialog;
 
     private boolean cancel = true;
@@ -85,8 +87,10 @@ public class ColumnFamilyDialog extends JDialog {
         defaultValidationClassText.setText(cf.getDefaultValidationClass());
         minCompactionThresholdText.setText(cf.getMinCompactionThreshold());
         maxCompactionThresholdText.setText(cf.getMaxCompactionThreshold());
+      compactionStrategy.setText(cf.getCompactionStrategy());
+      compactionStrategyOptions.setText(cf.getCompactionStrategyOptions());
 
-        create(cf);
+      create(cf);
     }
 
     public ColumnFamilyDialog() {
@@ -189,7 +193,10 @@ public class ColumnFamilyDialog extends JDialog {
         // Max Compaction Threshold
         addJTextField(inputPanel, "Max Compaction Threshold: ", maxCompactionThresholdText);
 
-        // column metadata
+      addJTextField(inputPanel, "Compaction Strategy: ", compactionStrategy);
+      addJTextField(inputPanel, "Compaction Strategy Option: ", compactionStrategyOptions);
+
+      // column metadata
         metaDataDialog = new ColumnFamilyMetaDataDialog(cf);
         inputPanel.add(new JLabel("Column MetaData: "));
         JButton detail = new JButton("detail");

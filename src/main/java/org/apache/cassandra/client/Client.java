@@ -233,6 +233,7 @@ public class Client {
             cfDef.setComment(cf.getComment());
         }
 
+
         if (!isEmpty(cf.getRowsCached())) {
           //FIXME @Deprecated
           //            cfDef.setRow_cache_size(Double.valueOf(cf.getRowsCached()));
@@ -305,6 +306,13 @@ public class Client {
         if (!isEmpty(cf.getMaxCompactionThreshold())) {
             cfDef.setMax_compaction_threshold(Integer.valueOf(cf.getMaxCompactionThreshold()));
         }
+
+      if (!isEmpty(cf.getCompactionStrategy())) {
+        cfDef.setCompaction_strategy(cf.getCompactionStrategy());
+      }
+      if (!isEmpty(cf.getCompactionStrategyOptions())) {
+//        cfDef.setCompaction_strategy_options(Integer.valueOf(cf.getMaxCompactionThreshold()));
+      }
 
         client.set_keyspace(keyspaceName);
         client.system_add_column_family(cfDef);
@@ -404,6 +412,20 @@ public class Client {
             cfDef.setMax_compaction_threshold(Integer.valueOf(cf.getMaxCompactionThreshold()));
         }
 
+      if (!isEmpty(cf.getCompactionStrategy())) {
+        cfDef.setCompaction_strategy(cf.getCompactionStrategy());
+      }
+
+//      if (!isEmpty(cf.getCompactionStrategyOptions())) {
+////        cfDe(cf.getCompactionStrategy());
+//
+//        for (String compactionStrategyOption: cf.getCompactionStrategyOptions())
+//        {
+//                              return;
+//        }
+//
+//      }
+
         client.set_keyspace(keyspaceName);
         client.system_update_column_family(cfDef);
     }
@@ -487,6 +509,8 @@ public class Client {
                 cf.setDefaultValidationClass(cd.getDefault_validation_class());
                 cf.setMinCompactionThreshold(String.valueOf(cd.getMin_compaction_threshold()));
                 cf.setMaxCompactionThreshold(String.valueOf(cd.getMax_compaction_threshold()));
+                cf.setCompactionStrategy(String.valueOf(cd.getCompaction_strategy()));
+                cf.setCompactionStrategyOptions(String.valueOf(cd.getCompaction_strategy_options()));
                 for (ColumnDef cdef : cd.getColumn_metadata()) {
                     ColumnFamilyMetaData cfmd = new ColumnFamilyMetaData();
                     cfmd.setColumnName(new String(cdef.getName(), "UTF8"));
@@ -788,6 +812,7 @@ public class Client {
                     String scolName = getAsString(scol.bufferForName(), cfdata.get("COMPARATOR_TYPE").toString());
                     SColumn s = new SColumn(key, scolName, new TreeMap<String, Cell>());
                     for (Column col : scol.getColumns()) {
+//                      String nameZ = col.getName().toString();
                         String name = getAsString(col.bufferForName(), cfdata.get("SUBCOMPARATOR_TYPE").toString());
     					@SuppressWarnings("unchecked")
               String val = getAsString(col.bufferForValue(), getValidationType(col.bufferForName(), (List<ColumnDef>)cfdata.get("COLUMN_METADATA"), cfdata.get("DEFAULT_VALIDATION_CLASS").toString()));
