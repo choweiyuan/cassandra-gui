@@ -94,7 +94,11 @@
       <artifactId>jung</artifactId>
       <version>1.7.6</version>
     </dependency>
-
+    <dependency>
+      <groupId>de.sciss</groupId>
+      <artifactId>weblaf</artifactId>
+      <version>1.28</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.cassandra</groupId>
       <artifactId>cassandra-thrift</artifactId>

@@ -4,9 +4,9 @@ package org.apache.cassandra;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import javax.swing.JFrame;
-import javax.swing.JSplitPane;
+import javax.swing.*;
 
+import com.alee.laf.WebLookAndFeel;
 import org.apache.cassandra.gui.component.dialog.ConnectionDialog;
 import org.apache.cassandra.gui.component.dialog.listener.WindowCloseedListener;
 import org.apache.cassandra.gui.component.panel.ColumnTreePanel;
@@ -23,11 +23,20 @@ public class CassandraGUI extends JFrame {
      * @param args
      */
     public static void main(String[] args) {
-        CassandraGUI gui = new CassandraGUI("Cassandra GUI");
-        if (!gui.createAndShow()) {
+
+      // You should work with UI (including installing L&F) inside Event Dispatch Thread (EDT)
+      SwingUtilities.invokeLater(new Runnable() {
+        public void run() {
+          // Install WebLaF as application L&F
+          WebLookAndFeel.install();
+          CassandraGUI gui = new CassandraGUI("Cassandra GUI");
+          if (!gui.createAndShow()) {
             System.exit(0);
+          }
         }
+      });
     }
+
 
     public CassandraGUI(String title) {
         super(title);
